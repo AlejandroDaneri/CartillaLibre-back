@@ -4,10 +4,12 @@ const app = express();
 
 const PORT = 3000;
 
-app.get('/',(req,res) =>{
-  res.status(200).send("Ping")
+app.get('/ping',(req,res) =>{
+  res.status(200).json("Ping")
 })
 
-app.listen(PORT,()=>{
-  console.log("Escuchando en el puerto", PORT)
+const server = app.listen(PORT,()=>{
+  console.log("Listen in port:", PORT)
 })
+
+module.exports = server
