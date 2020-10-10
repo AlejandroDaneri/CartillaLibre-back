@@ -1,8 +1,6 @@
+require('dotenv').config()
 const express = require('express');
-
 const app = express();
-
-const PORT = 4000;
 
 app.get('/ping',(req,res) =>{
   res.status(200).json("Ping")
@@ -13,8 +11,8 @@ app.get('/',(req,res) =>{
 })
 
 
-const server = app.listen(PORT,()=>{
-  console.log("Listen in port:", PORT)
+const server = app.listen(process.env.PORT,()=>{
+  console.log("Listen in port:", process.env.PORT)
 })
 
 module.exports = server
