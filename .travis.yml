@@ -1,0 +1,16 @@
+sudo: required
+language: node_js
+node_js:
+- 14
+install:
+- npm install
+after_success:
+- coveralls < coverage/lcov.info
+test:
+- npm test
+deploy:
+  provider: heroku
+  api_key:
+    secure: jucVfyS3uL+LBiX7RuRfkJcGw5/oucs28DFaHnqZ6Yy48xavlqBrJQdCbTGkLgpUiq9kX+lKRNLTgaGOgoewMQU9GNzVRQHITeITatRZnKUweOAZhLxCjEeKrbUWkLLOq97UeS60px9uYRxwa0gbeVwU2CAan86cGdk20oeeCsNdi5uJhu+BxcRxt0viMzPyqRqoTVJjsH+xighLEzDp25VDZ4Okf61XAGrbjJKJ671SbPJotwd4cunl0pE8OUL86O3CN64hc8S/ZiOKeGehDbVCeljlkSBRLLoP3E18OsG9kW9M/kvaBpFMLSKkmJU9opAqcb79LdSCmmc55hjrwO/eT8Yf/69jlAmalzwlGF/ov8M/TCICH6PAh5fe6swiZwctx2QaqlRtxMSMb4ZZXypmwkOS33l8aywTDSSRxxWPTi2UAzMiKVSLF0QRwNamX/Gd+SwouSJhofxlJ2yTj/8ydHdTIemaS18caQw3DDTmwRCDP3zPExn/z1ox9GZSBFjglZAQHemed+1+pzTp/XNUriGyb3Kr7gtlJAFis48f1RFz5HSD+8mLfs3D7zUCUQpbvFRmqOTe5TZkdx5kpsuFODE9IbVITVqu3f13Nhc+X+gKuZDj55L5qs7n4305TYTs9DmonyPfYE/Ia7A1vJg9RuRSbfa0TQf1LQuTOIc=
+  app:
+    develop: cartillalibre-back
