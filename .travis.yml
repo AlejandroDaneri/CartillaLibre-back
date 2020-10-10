@@ -5,7 +5,7 @@ node_js:
 install:
 - npm install
 after_success:
-- coveralls < coverage/lcov.info
+- ./node_modules/.bin/mocha -R mocha-lcov-reporter | ./node_modules/coveralls/bin/coveralls.js
 test:
 - npm test
 deploy:
