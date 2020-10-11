@@ -15,6 +15,16 @@ describe('Tests: ',()=>{
         done();
       });
   });
+
+  it('GET medics should return an object', (done) => {
+    chai.request(server)
+      .get('/medics')
+      .end( function(err,res){
+        res.should.have.status(200);
+        res.body.should.to.be.a("object")
+        done();
+      });
+  });
 });
 
 
