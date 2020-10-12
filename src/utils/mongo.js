@@ -10,9 +10,10 @@ const options = {
 
 const url = process.env.DATABASE_URL;
 
-mongoose.connect(url, options).then( function() {
-  console.log('MongoDB is connected');
-})
+mongoose.connect(url, options).
+  then( function() {
+    console.log('MongoDB is connected');
+  })
   .catch( function(err) {
-    console.log(err);
+    console.error(err);
   });
