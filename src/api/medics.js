@@ -7,4 +7,9 @@ medics.route('/')
   .get(medicCtrl.findAllMedics)
   .post(medicCtrl.addMedic)
 
+medics.route('/:id')
+  .get(medicCtrl.findById)
+  .put(medicCtrl.updateTVShow)
+  .delete(medicCtrl.deleteTVShow);
+
 module.exports = medics
