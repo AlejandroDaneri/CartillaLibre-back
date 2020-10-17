@@ -13,8 +13,7 @@ exports.findAllMedics = function(req, res) {
 
 //POST - Insert a new medics in the DB
 exports.addMedic = function(req, res) {
-  console.log('POST');
-  console.log(req.body);
+  console.table(req.body)
 
   var newMedic = new medic({
       name:           req.body.name,

@@ -3,14 +3,13 @@ const mongoose = require('mongoose');
 
 const options = {
   useNewUrlParser: true,
+  useUnifiedTopology: true,
   reconnectTries: Number.MAX_VALUE,
   reconnectInterval: 500,
   connectTimeoutMS: 10000,
 };
 
-const url = process.env.DATABASE_URL;
-
-mongoose.connect(url, options).
+mongoose.connect(process.env.DATABASE_URL, options).
   then( function() {
     console.log('MongoDB is connected');
   })
