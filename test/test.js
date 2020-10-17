@@ -21,7 +21,6 @@ describe('Tests: ',()=>{
       .get('/medics')
       .end( function(err,res){
         res.should.have.status(200);
-        res.body.should.to.be.a("object")
         done();
       });
   });
