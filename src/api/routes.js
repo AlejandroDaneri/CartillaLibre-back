@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const medics = require('./medics');
-const utils = require('../utils/mongo')
+require('../utils/mongo')
 
 router.use('/medics', medics)
 router.use(express.json())
