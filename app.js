@@ -6,7 +6,7 @@ const routes = require('./src/api/routes')
 app.use(express.json())
 
 app.use(function (req, res, next) {
-  console.log(`${req.method} ${req.path} ${req.params.id}`)
+  console.log(`${req.method} ${req.path}`)
   if (Object.keys(req.body).length !== 0) {
     console.table(req.body)
   }
