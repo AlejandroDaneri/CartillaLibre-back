@@ -6,22 +6,19 @@ var medic  = mongoose.model('Medic');
 exports.findAllMedics = function(req, res) {
   medic.find(function(err, medics) {
       if(err) res.send(500, err.message);
-      console.log('GET /medic')
       res.status(200).jsonp(medics);
   });
 };
 
-//GET - Return a TVShow with specified ID
+//GET - Return a medic with specified ID
 exports.findById = function(req, res) {
   medic.findById(req.params.id, function(err, medic) {
     if(err) return res.send(500, err.message);
-
-    console.log('GET /tvshow/' + req.params.id);
     res.status(200).jsonp(medic);
   });
 };
 
-//POST - Insert a new medics in the DB
+//POST - Insert a new medic in the DB
 exports.addMedic = function(req, res) {
   console.table(req.body)
 
@@ -49,12 +46,12 @@ exports.updateTVShow = function(req, res) {
   });
 };
 
-//DELETE - Delete a TVShow with specified ID
+//DELETE - Delete a medic with specified ID
 exports.deleteTVShow = function(req, res) {
   medic.findById(req.params.id, function(err, medic) {
     medic.remove(function(err) {
       if(err) return res.send(500, err.message);
-      res.status(200);
+      res.status(200).jsonp(medic);
     })
   });
 };
