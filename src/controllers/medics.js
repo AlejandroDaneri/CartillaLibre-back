@@ -3,20 +3,20 @@ require('../models/medics');
 var medics  = mongoose.model('Medic');
 var http = require('http-status-codes')
 
+
+const returnResults = (res, err,result) => {
+  if(err) return res.send(http.INTERNAL_SERVER_ERROR, err.message);
+  res.status(http.OK).jsonp(result);
+}
+
 //GET - Return all medics in the DB
 exports.findAllMedics = function(req, res) {
-  medics.find(function(err, medics) {
-      if(err) res.send(http.INTERNAL_SERVER_ERROR, err.message);
-      res.status(http.OK).jsonp(medics);
-  });
+  medics.find(returnResults.bind(undefined,res));
 };
 
 //GET - Return a medic with specified ID
 exports.findById = function(req, res) {
-  medics.findById(req.params.id, function(err, medic) {
-    if(err) return res.send(http.INTERNAL_SERVER_ERROR, err.message);
-    res.status(http.OK).jsonp(medic);
-  });
+  medics.findById(req.params.id, returnResults.bind(undefined,res));
 };
 
 //POST - Insert a new medic in the DB
@@ -35,7 +35,7 @@ exports.addMedic = function(req, res, next) {
       });
 
       newMedic.save(function(err, medic) {
-        if(err) return res.status(http.INTERNAL_SERVER_ERROR).send( err.message)
+        if(err) return res.status(http.INTERNAL_SERVER_ERROR).send(err.message)
         res.status(http.OK).jsonp(medic)
       });
     }
