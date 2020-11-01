@@ -2,8 +2,14 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 var medicSchema = new Schema({
-  name:           { type: String },
-  speciality:     { type: String },
+  name: { 
+    type: String ,
+    required: true
+  },
+  speciality: {
+    type: String,
+    required: true 
+  },
 });
 
 module.exports = mongoose.model('Medic', medicSchema);

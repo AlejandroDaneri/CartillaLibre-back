@@ -1,43 +1,37 @@
 var mongoose = require('mongoose');
 require('../models/medics');
-var medics  = mongoose.model('Medic');
+var medic  = mongoose.model('Medic');
 var http = require('http-status-codes')
 
 
-const returnResults = (res, err,result) => {
+const returnQuery = (res, err,result) => {
   if(err) return res.send(http.INTERNAL_SERVER_ERROR, err.message);
   res.status(http.OK).jsonp(result);
 }
 
 //GET - Return all medics in the DB
 exports.findAllMedics = function(req, res) {
-  medics.find(returnResults.bind(undefined,res));
+  medic.find(returnQuery.bind(undefined,res));
 };
 
 //GET - Return a medic with specified ID
 exports.findById = function(req, res) {
-  medics.findById(req.params.id, returnResults.bind(undefined,res));
+  medic.findById(req.params.id, returnQuery.bind(undefined,res));
 };
 
 //POST - Insert a new medic in the DB
 const alreadyExistsMessage = (medic) => {`Medic ${medic} already exists`};
 exports.addMedic = function(req, res, next) {
   const name = req.body.name
-  medics.findOne({ name: name }, function (err, existing) {
+  medic.findOne({ name: name }, function (err, existing) {
     if (existing != null) {
       console.warn(alreadyExistsMessage(name))
       res.status(http.BAD_REQUEST).send(alreadyExistsMessage(name))
     }
     else {
-      const newMedic = new medics({
-        name:           req.body.name,
-        speciality:     req.body.speciality
-      });
+      const newMedic = new medic(req.body);
 
-      newMedic.save(function(err, medic) {
-        if(err) return res.status(http.INTERNAL_SERVER_ERROR).send(err.message)
-        res.status(http.OK).jsonp(medic)
-      });
+      newMedic.save(returnQuery.bind(undefined,res));
     }
   });
 
@@ -45,25 +39,19 @@ exports.addMedic = function(req, res, next) {
 
 //PUT - Update a register already exists
 exports.updateMedic = function(req, res) {
-  medics.findById(req.params.id, function(err, medic) {
+  medic.findById(req.params.id, function(err, medic) {
     medic.name   = req.body.name;
     medic.speciality    = req.body.speciality;
 
-    medic.save(function(err) {
-      if(err) return res.send(http.INTERNAL_SERVER_ERROR, err.message);
-      res.status(http.OK).jsonp(medic);
-    });
+    medic.save(returnQuery.bind(undefined,res));
   });
 };
 
 //DELETE - Delete a medic with specified ID
 exports.deleteMedic = function(req, res) {
-  medics.findById(req.params.id, function(err, medic) {
+  medic.findById(req.params.id, function(err, medic) {
     if (!medic) return res.send(http.NOT_FOUND)
-    medic.remove(function(err) {
-      if(err) return res.send(http.INTERNAL_SERVER_ERROR, err.message);
-      res.status(http.OK).jsonp(medic);
-    })
+    medic.remove(returnQuery.bind(undefined,res))
   });
 };
 
