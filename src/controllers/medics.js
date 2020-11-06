@@ -50,7 +50,7 @@ exports.updateMedic = function(req, res) {
 //DELETE - Delete a medic with specified ID
 exports.deleteMedic = function(req, res) {
   medic.findById(req.params.id, function(err, medic) {
-    if (!medic) return res.send(http.NOT_FOUND)
+    if (!medic) return res.status(http.NOT_FOUND).jsonp("Error: not founded")
     medic.remove(returnQuery.bind(undefined,res))
   });
 };

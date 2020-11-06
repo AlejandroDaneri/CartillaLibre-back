@@ -89,17 +89,22 @@ describe('Medics tests: ', () => {
       .set('Content-Type', 'application/json')
       .send(bMedic)
       .end(function (err, res) {
-        res.should.have.status(200);
-        res.body.should.include(bMedic);
-        done();
+        var id = res.body._id
+        chai.request(server)
+          .delete(`${baseMedics}/${id}`)
+          .set('Content-Type', 'application/json')
+          .end(function (err,res){
+            res.should.have.status(200)
+            res.body.should.include(bMedic);
+            done()
+          })
       });
   });
 
   it('DELETE NOT existing medic should return error', (done) => {
     chai.request(server)
-      .delete(`${baseMedics}`)
+      .delete(`${baseMedics}/19sdf2`)
       .set('Content-Type', 'application/json')
-      .send(bMedic)
       .end(function (err, res) {
         res.should.have.status(404);
         done();
