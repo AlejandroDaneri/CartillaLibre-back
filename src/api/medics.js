@@ -22,6 +22,7 @@ medics.route('/')
   .post([
     body('name').not().isEmpty(),
     body('speciality').not().isEmpty(),
+    body('rating').isInt({min:1,max:5}),
     validation,
     medicCtrl.addMedic])
 

@@ -7,12 +7,14 @@ const server = require('../app');
 
 const aMedic = {
   name: "Medic",
-  speciality: "surgery"
+  speciality: "surgery",
+  rating:5
 }
 
 const bMedic = {
   name: "bMedic",
-  speciality: "surgery"
+  speciality: "surgery",
+  rating: 3
 }
 
 
@@ -61,13 +63,28 @@ describe('Medics tests: ', () => {
       });
   });
 
-  it('POST medics without name should return 400', (done) => {
+  it('POST medics with incomplete body should return 400', (done) => {
     chai.request(server)
       .post(`${baseMedics}`)
       .set('Content-Type', 'application/json')
       .send({speciality: "ex"})
       .end(function (err, res) {
         res.should.have.status(400);
+        done();
+      });
+  });
+
+  it('POST medics with negative rating should return 400', (done) => {
+    var toSend = Object.assign({},aMedic)
+    toSend.rating = -11
+    chai.request(server)
+      .post(`${baseMedics}`)
+      .set('Content-Type', 'application/json')
+      .send(toSend)
+      .end(function (err, res) {
+        res.should.have.status(400);
+        res.body.errors.should.have.lengthOf(1);
+        res.body.errors[0].should.to.have.all.keys('value', 'msg','param','location');
         done();
       });
   });
@@ -112,6 +129,3 @@ describe('Medics tests: ', () => {
   });
 
 });
-
-
-
