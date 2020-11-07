@@ -28,7 +28,9 @@ medics.route('/')
 
 medics.route('/:id')
   .get(medicCtrl.findById)
-  .put(medicCtrl.updateMedic)
+  .patch([
+    body('rating').isInt({min:1,max:5}),
+    validation,medicCtrl.updateMedic])
   .delete(medicCtrl.deleteMedic);
 
 

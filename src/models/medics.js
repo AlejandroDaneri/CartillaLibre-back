@@ -11,11 +11,7 @@ var medicSchema = new Schema({
     required: true 
   },
   rating: {
-    type: Number,
-    default: 1,
-    required: true,
-    min: 1,
-    max: 5
+    type: Array
   }
 });
 

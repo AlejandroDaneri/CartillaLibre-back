@@ -17,6 +17,11 @@ const bMedic = {
   rating: 3
 }
 
+const cMedic = {
+  name: "cMedic",
+  speciality: "surgery",
+  rating: 1
+}
 
 const baseMedics = '/medics'
 
@@ -41,13 +46,15 @@ describe('Medics tests: ', () => {
   });
 
   it('POST medics should return an object', (done) => {
+    var toReceive = Object.assign({},aMedic)
+    toReceive.rating = [toReceive.rating]
     chai.request(server)
       .post(`${baseMedics}`)
       .set('Content-Type', 'application/json')
       .send(aMedic)
       .end(function (err, res) {
         res.should.have.status(200);
-        res.body.should.include(aMedic);
+        res.body.should.deep.include(toReceive);
         done();
       });
   });
@@ -89,6 +96,23 @@ describe('Medics tests: ', () => {
       });
   });
 
+  it('POST medics with too high rating should return 400', (done) => {
+    var toSend = Object.assign({},aMedic)
+    toSend.rating = 10
+    chai.request(server)
+      .post(`${baseMedics}`)
+      .set('Content-Type', 'application/json')
+      .send(toSend)
+      .end(function (err, res) {
+        res.should.have.status(400);
+        res.body.errors.should.have.lengthOf(1);
+        res.body.errors[0].should.to.have.all.keys('value', 'msg','param','location');
+        done();
+      });
+  });
+
+  
+
   it('POST medics without speciality should return 400', (done) => {
     chai.request(server)
       .post(`${baseMedics}`)
@@ -101,6 +125,8 @@ describe('Medics tests: ', () => {
   });
 
   it('DELETE existing medic should return that medic', (done) => {
+    var toReceive = Object.assign({},bMedic)
+    toReceive.rating = [toReceive.rating]
     chai.request(server)
       .post(`${baseMedics}`)
       .set('Content-Type', 'application/json')
@@ -112,7 +138,7 @@ describe('Medics tests: ', () => {
           .set('Content-Type', 'application/json')
           .end(function (err,res){
             res.should.have.status(200)
-            res.body.should.include(bMedic);
+            res.body.should.deep.include(toReceive);
             done()
           })
       });
@@ -126,6 +152,33 @@ describe('Medics tests: ', () => {
         res.should.have.status(404);
         done();
       });
+  });
+
+  it('PATCH medics with correct body should works fine', (done) => {
+    var toSend = Object.assign({},cMedic)
+    toSend.rating = 5
+    chai.request(server)
+      .post(`${baseMedics}`)
+      .set('Content-Type', 'application/json')
+      .send(toSend)
+      .end(function (err, res) {
+        var id =res.body._id
+        toSend.rating = 4
+        chai.request(server)
+        .patch(`${baseMedics}/${id}`)
+        .set('Content-Type', 'application/json')
+        .send(toSend)
+        .end(function (err,res){
+          chai.request(server)
+          .get(`${baseMedics}/${id}`)
+          .set('Content-Type', 'application/json')
+          .end(function (err,res){
+            res.should.have.status(200)
+            res.body.should.deep.property('rating',[5,4]);
+            done()
+          })
+      });
+    })
   });
 
 });

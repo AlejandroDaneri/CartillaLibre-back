@@ -29,6 +29,7 @@ exports.addMedic = function(req, res, next) {
       res.status(http.BAD_REQUEST).send(alreadyExistsMessage(name))
     }
     else {
+      req.body.rating = [req.body.rating]
       const newMedic = new medic(req.body);
 
       newMedic.save(returnQuery.bind(undefined,res));
@@ -37,14 +38,19 @@ exports.addMedic = function(req, res, next) {
 
 };
 
-//PUT - Update a register already exists
+//PATCH - Update a register already exists
 exports.updateMedic = function(req, res) {
-  medic.findById(req.params.id, function(err, medic) {
-    medic.name   = req.body.name;
-    medic.speciality    = req.body.speciality;
-
-    medic.save(returnQuery.bind(undefined,res));
-  });
+  medic.updateOne(
+    { _id: req.params.id },
+    { $push: { rating: [req.body.rating] } },
+    function(err, result) {
+      if (err) {
+        res.send(err);
+      } else {
+        res.send(result);
+      }
+    }
+  );
 };
 
 //DELETE - Delete a medic with specified ID
